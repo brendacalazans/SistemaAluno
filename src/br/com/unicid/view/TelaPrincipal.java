@@ -188,7 +188,7 @@ public class TelaPrincipal extends JFrame {
 		mntmNewMenuItem_9 = new JMenuItem("Sobre");
 		mntmNewMenuItem_9.setHorizontalAlignment(SwingConstants.LEFT);
 		mnNewMenu_2.add(mntmNewMenuItem_9);
-		contentPane = new JPanel();
+		contentPane =  new JPanel();
 		contentPane.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
