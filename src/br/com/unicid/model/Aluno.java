@@ -1,14 +1,10 @@
 package br.com.unicid.model;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Aluno {
 	
-	// 1. Seta o formato de data brasileiro para a classe
-	private static SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
-
-	// 2. Atributos dos futuros objetos aluno
+	// 1. Atributos dos futuros objetos aluno
 	private int rgmAluno;
 	private String nomeAluno;
 	private Date dataAluno;
@@ -21,7 +17,7 @@ public class Aluno {
 	private String campusAluno;
 	private int periodoAluno;
 	
-	// 3. Construtores com sobrecarga e com parâmetros
+	// 2. Construtores com sobrecarga e com parâmetros
 	public Aluno() {
 	}
 
@@ -41,7 +37,7 @@ public class Aluno {
 		this.periodoAluno = periodoAluno;
 	}
 	
-	// 4. Getters & Setters
+	// 3. Getters & Setters
 
 	public int getRgmAluno() {
 		return rgmAluno;

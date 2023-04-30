@@ -15,10 +15,10 @@ public class AlunoDAO {
 	SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
 	
 	// 2. Inicialização de atributos
-	private Aluno aluno; // 1.1 Objeto aluno
-	private Connection conn; // 1.2 Conexão com o banco de dados
-	private PreparedStatement ps; //1.3 Permite executar querys SQL
-	private ResultSet rs; // 1.4 Modo tabela
+		private Aluno aluno;                    // 2.1 Objeto aluno
+		private Connection conn;                // 2.2 Conexão com o banco de dados
+		private PreparedStatement ps;           //2.3 Permite executar querys SQL
+		private ResultSet rs;                   // 2.4 Modo tabela
 	
 	// 3. Construtor com conexão sql
 	public AlunoDAO() throws Exception{
