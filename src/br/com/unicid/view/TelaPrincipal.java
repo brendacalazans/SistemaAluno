@@ -36,8 +36,10 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 
 import br.com.unicid.dao.AlunoDAO;
+import br.com.unicid.dao.BoletimDAO;
 import br.com.unicid.dao.NotaFaltaDAO;
 import br.com.unicid.model.Aluno;
+import br.com.unicid.model.Boletim;
 
 public class TelaPrincipal extends JFrame {
 
@@ -104,7 +106,6 @@ public class TelaPrincipal extends JFrame {
 	private JLabel lblNewLabel_4;
 	private JComboBox lblcmbNfNotas;
 	private JLabel lblNewLabel_5;
-	private JComboBox lblcmbNfFaltas;
 	private JButton btnNfConsultar;
 	private JButton btnNfAlterar;
 	private JButton btnNfDeletar;
@@ -125,6 +126,7 @@ public class TelaPrincipal extends JFrame {
 	private JFormattedTextField txtDpCPF;
 	private JFormattedTextField txtDpCelular;
 	private JFormattedTextField txtDpData;
+	private JTextField lblNfFaltas;
 
 	/**
 	 * Launch the application.
@@ -811,7 +813,7 @@ public class TelaPrincipal extends JFrame {
 		panel_2.add(lblNewLabel_4);
 		
 		lblcmbNfNotas = new JComboBox();
-		lblcmbNfNotas.setModel(new DefaultComboBoxModel(new String[] {"0,0", "0,5", "1,0", "1,5", "2,0", "2,5", "3,0", "3,5", "4,0", "4,5", "5,0", "5,5", "6,0", "6,5", "7,0", "7,5", "8,0", "8,5", "9,0", "9,5", "10,0"}));
+		lblcmbNfNotas.setModel(new DefaultComboBoxModel(new String[] {"0.0", "0.5", "1.0", "1.5", "2.0", "2.5", "3.0", "3.5", "4.0", "4.5", "5.0", "5.5", "6.0", "6.5", "7.0", "7.5", "8.0", "8.5", "9.0", "9.5", "10.0"}));
 		lblcmbNfNotas.setFont(new Font("Arial", Font.PLAIN, 14));
 		lblcmbNfNotas.setBounds(278, 131, 83, 25);
 		panel_2.add(lblcmbNfNotas);
@@ -821,31 +823,258 @@ public class TelaPrincipal extends JFrame {
 		lblNewLabel_5.setBounds(384, 134, 99, 14);
 		panel_2.add(lblNewLabel_5);
 		
-		lblcmbNfFaltas = new JComboBox();
-		lblcmbNfFaltas.setModel(new DefaultComboBoxModel(new String[] {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"}));
-		lblcmbNfFaltas.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblcmbNfFaltas.setBounds(439, 131, 83, 25);
-		panel_2.add(lblcmbNfFaltas);
+		btnNfConsultar = new JButton("Consultar");
+		btnNfConsultar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// =====================================
+				
+				// 1. Validação do botão Consultar
+				// 1.1 Campo - RGM
+				if (txtNfRGM.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira o RGM do aluno!");
+					txtNfRGM.requestFocus();
+				} else {
+					// 2. Método de Consultar
+					try {
+						AlunoDAO dao = new AlunoDAO();
+						NotaFaltaDAO dao2 = new NotaFaltaDAO();
+						Aluno aluno = dao.consultar(Integer.parseInt(txtNfRGM.getText()));
+						Boletim boletim = dao2.consultar(Integer.parseInt(txtNfRGM.getText()));
+						
+						// 2.1 Labels relacionadas ao banco de Aluno
+						lblNfNome.setText(aluno.getNomeAluno());
+						lblNfCurso.setText(aluno.getCursoAluno());
+						
+						// 2.2 Campos relacionados ao banco de Notas/Boletim
 		
-		btnNfConsultar = new JButton("New button");
+				
+						String disciplina = boletim.getDisciplina();
+						if (disciplina.equals("Programação Orientada à Objetos")) {
+							lblNfDisciplina.setSelectedIndex(0);
+						} else if (disciplina.equals("Técnicas de Algoritmos")) {
+							lblNfDisciplina.setSelectedIndex(1);
+						} else {
+							lblNfDisciplina.setSelectedIndex(2);
+						}
+						
+						int semestre = boletim.getSemestre();
+						if (semestre == 1) {
+							lblcmbNfSemestre.setSelectedIndex(0);
+						} else if (semestre == 2) {
+							lblcmbNfSemestre.setSelectedIndex(1);
+						}else if (semestre == 3) {
+							lblcmbNfSemestre.setSelectedIndex(2);
+						}else if (semestre == 4) {
+							lblcmbNfSemestre.setSelectedIndex(3);
+						}else if (semestre == 5) {
+							lblcmbNfSemestre.setSelectedIndex(4);
+						}else if (semestre == 6) {
+							lblcmbNfSemestre.setSelectedIndex(5);
+						}else if (semestre == 7) {
+							lblcmbNfSemestre.setSelectedIndex(6);
+						}else if (semestre == 8) {
+							lblcmbNfSemestre.setSelectedIndex(7);
+						}else if (semestre == 9) {
+							lblcmbNfSemestre.setSelectedIndex(8);
+						} else {
+							lblcmbNfSemestre.setSelectedIndex(9);
+						}
+
+						double nota = boletim.getNota();
+						if (nota == 0) {
+							lblcmbNfNotas.setSelectedIndex(0);
+						} else if (nota == 0.5) {
+							lblcmbNfNotas.setSelectedIndex(1);
+						}else if (nota == 1) {
+							lblcmbNfNotas.setSelectedIndex(2);
+						}else if (nota == 1.5) {
+							lblcmbNfNotas.setSelectedIndex(3);
+						}else if (nota == 2) {
+							lblcmbNfNotas.setSelectedIndex(4);
+						}else if (nota == 2.5) {
+							lblcmbNfNotas.setSelectedIndex(5);
+						}else if (nota == 3) {
+							lblcmbNfNotas.setSelectedIndex(6);
+						}else if (nota == 3.5) {
+							lblcmbNfNotas.setSelectedIndex(7);
+						}else if (nota == 4) {
+							lblcmbNfNotas.setSelectedIndex(8);
+						} else if (nota == 4.5) {
+							lblcmbNfNotas.setSelectedIndex(9);
+						}else if (nota == 5) {
+							lblcmbNfNotas.setSelectedIndex(10);
+						}else if (nota == 5.5) {
+							lblcmbNfNotas.setSelectedIndex(11);
+						}else if (nota == 6) {
+							lblcmbNfNotas.setSelectedIndex(12);
+						}else if (nota == 6.5) {
+							lblcmbNfNotas.setSelectedIndex(13);
+						}else if (nota == 7) {
+							lblcmbNfNotas.setSelectedIndex(14);
+						}else if (nota == 7.5) {
+							lblcmbNfNotas.setSelectedIndex(15);
+						}else if (nota == 8) {
+							lblcmbNfNotas.setSelectedIndex(16);
+						}else if (nota == 8.5) {
+							lblcmbNfNotas.setSelectedIndex(17);
+						}else if (nota == 9) {
+							lblcmbNfNotas.setSelectedIndex(18);
+						}else if (nota == 9.5) {
+							lblcmbNfNotas.setSelectedIndex(19);
+						}else {
+							lblcmbNfNotas.setSelectedIndex(20);
+						}
+					
+						lblNfFaltas.setText(String.valueOf(boletim.getFalta()));
+
+					} catch (Exception e4) {
+						e4.printStackTrace();
+						JOptionPane.showMessageDialog(null, "Inválido - RGM inserido não está cadastrado!");
+					}
+					// =====================================
+				}
+			}
+		});
 		btnNfConsultar.setBounds(20, 175, 80, 80);
 		panel_2.add(btnNfConsultar);
 		
-		btnNfAlterar = new JButton("New button");
+		btnNfAlterar = new JButton("Alterar");
+		btnNfAlterar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// =====================================
+				// 1. Validação do botão Alterar
+
+				// 1.1 Campo - RGM
+				if (txtNfRGM.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira o RGM do aluno!");
+					txtNfRGM.requestFocus();
+				} 
+
+				// 1.2 Campo - Falta
+				if (lblNfFaltas.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira o número de faltas");
+					lblNfFaltas.requestFocus();
+				} 
+				// 2. Método de Alterar
+					
+				try {
+					Boletim boletim = new Boletim();
+					boletim.setRgmAluno(Integer.parseInt(txtNfRGM.getText()));
+					boletim.setDisciplina((String) lblNfDisciplina.getSelectedItem());
+					boletim.setSemestre(Integer.parseInt((String) lblcmbNfSemestre.getSelectedItem()));
+					boletim.setNota(Double.parseDouble((String) lblcmbNfNotas.getSelectedItem()));
+					boletim.setFalta(Integer.parseInt(lblNfFaltas.getText()));
+					
+					NotaFaltaDAO dao = new NotaFaltaDAO();
+					
+					dao.alterar(boletim);
+					JOptionPane.showMessageDialog(null, "Alterado com sucesso!");
+
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, "Erro ao alterar: " + e1.getMessage());
+				}
+		// =====================================
+			}
+		});
 		btnNfAlterar.setBounds(121, 175, 80, 80);
 		panel_2.add(btnNfAlterar);
 		
-		btnNfDeletar = new JButton("New button");
+		btnNfDeletar = new JButton("Excluir");
+		btnNfDeletar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// =====================================
+				// 1. Validação do botão Excluir
+
+				// 1.1 Campo - RGM
+				if (txtNfRGM.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira o RGM do aluno!");
+					txtNfRGM.requestFocus();
+				} 
+
+				// 2. Método de Excluir
+					
+				try {
+					
+					NotaFaltaDAO daoNota = new NotaFaltaDAO();
+					
+					daoNota.excluir(Integer.parseInt(txtNfRGM.getText()));
+					JOptionPane.showMessageDialog(null, "Excluido com sucesso!");
+
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, "Erro ao excluir: " + e1.getMessage());
+				}
+		// =====================================
+			}
+		});
 		btnNfDeletar.setBounds(224, 175, 80, 80);
 		panel_2.add(btnNfDeletar);
 		
-		btnNfLimpar = new JButton("New button");
+		btnNfLimpar = new JButton("Limpar");
+		btnNfLimpar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// =====================================
+				// 1. Método de Limpar
+				txtNfRGM.setText(null);
+				lblNfNome.setText(null);
+				lblNfCurso.setText(null);
+				lblNfDisciplina.setSelectedIndex(0);
+				lblcmbNfSemestre.setSelectedIndex(0);
+				lblcmbNfNotas.setSelectedIndex(0);
+				lblNfFaltas.setText(null);
+				// =====================================
+			}
+		});
 		btnNfLimpar.setBounds(328, 175, 80, 80);
 		panel_2.add(btnNfLimpar);
 		
-		btnNfSalvar = new JButton("New button");
+		btnNfSalvar = new JButton("Salvar");
+		btnNfSalvar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// =====================================
+				// 1. Validação do botão Salvar
+
+				// 1.1 Campo - RGM
+				if (txtNfRGM.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira o RGM do aluno!");
+					txtNfRGM.requestFocus();
+				} 
+
+				// 1.2 Campo - Falta
+				if (lblNfFaltas.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira o número de faltas");
+					lblNfFaltas.requestFocus();
+				} 
+				// 2. Método de Salvar
+					
+				try {
+					Boletim boletim = new Boletim();
+					boletim.setRgmAluno(Integer.parseInt(txtNfRGM.getText()));
+					boletim.setDisciplina((String) lblNfDisciplina.getSelectedItem());
+					boletim.setSemestre(Integer.parseInt((String) lblcmbNfSemestre.getSelectedItem()));
+					boletim.setNota(Double.parseDouble((String) lblcmbNfNotas.getSelectedItem()));
+					boletim.setFalta(Integer.parseInt(lblNfFaltas.getText()));
+					
+					NotaFaltaDAO dao = new NotaFaltaDAO();
+					
+					dao.salvar(boletim);
+					JOptionPane.showMessageDialog(null, "Salvo com sucesso!");
+
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, "Erro ao Salvar: " + e1.getMessage());
+				}
+		// =====================================
+			}
+		});
 		btnNfSalvar.setBounds(433, 175, 80, 80);
 		panel_2.add(btnNfSalvar);
+		
+		lblNfFaltas = new JTextField();
+		lblNfFaltas.setFont(new Font("Arial", Font.PLAIN, 13));
+		lblNfFaltas.setColumns(10);
+		lblNfFaltas.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, Color.GRAY, new Color(128, 128, 128)));
+		lblNfFaltas.setBackground(new Color(214, 214, 214));
+		lblNfFaltas.setBounds(439, 132, 83, 22);
+		panel_2.add(lblNfFaltas);
 		
 		panel_3 = new JPanel();
 		tabbedPane.addTab("Boletim", null, panel_3, null);

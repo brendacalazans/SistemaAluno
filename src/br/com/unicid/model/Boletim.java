@@ -16,7 +16,6 @@ public class Boletim {
 	}
 
 	public Boletim(int rgmAluno, String disciplina, int semestre, double nota, int falta) {
-		super();
 		this.rgmAluno = rgmAluno;
 		this.disciplina = disciplina;
 		this.semestre = semestre;
