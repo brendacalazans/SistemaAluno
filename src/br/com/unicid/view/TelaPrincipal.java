@@ -36,6 +36,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 
 import br.com.unicid.dao.AlunoDAO;
+import br.com.unicid.dao.NotaFaltaDAO;
 import br.com.unicid.model.Aluno;
 
 public class TelaPrincipal extends JFrame {
@@ -296,6 +297,31 @@ public class TelaPrincipal extends JFrame {
 		panel.add(lblCelular);
 		
 		btnDpLimpar = new JButton("Limpar");
+		btnDpLimpar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// =====================================
+				// 1. Método de Limpar
+				txtDpRGM.setText(null);
+				txtDpNome.setText(null);
+				txtDpData.setText(null);
+				txtDpCPF.setText(null);
+				txtDpEmail.setText(null);
+				txtDpEndereco.setText(null);
+				txtDpMunicipio.setText(null);
+				cmbDpUF.setSelectedIndex(0);
+				txtDpCelular.setText(null);
+				cmbCCurso.setSelectedIndex(0);
+				cmbCCampus.setSelectedIndex(0);
+				if (rdbtnCMatutino.isSelected()) {
+					rdbtnCMatutino.setSelected(true);
+				} else if (rdbtnCVespertino.isSelected()) {
+					rdbtnCMatutino.setSelected(true);
+				} else if (rdbtnCNoturno.isSelected()) {
+					rdbtnCMatutino.setSelected(true);
+				}
+				// =====================================
+			}
+		});
 		btnDpLimpar.setFont(new Font("Arial", Font.PLAIN, 14));
 		btnDpLimpar.setBounds(399, 223, 129, 30);
 		panel.add(btnDpLimpar);
@@ -455,20 +481,274 @@ public class TelaPrincipal extends JFrame {
 		btnCAlterar = new JButton("Alterar");
 		btnCAlterar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				// =====================================
+				// 1. Validação do botão Alterar
+
+				// 1.1 Campo - RGM
+				if (txtDpRGM.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira o RGM do aluno!");
+					txtDpRGM.requestFocus();
+				} 
+
+				// 1.2 Campo - Nome
+				if (txtDpNome.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira o nome do aluno!");
+					txtDpNome.requestFocus();
+				} else if (txtDpNome.getText().length() < 3) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira mais caracteres para formar um nome!");
+					txtDpNome.requestFocus();
+				}
+
+				// 1.3 Campo - Data Nascimento
+				if (txtDpData.getText().trim().length() != 10) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira uma data de nascimento válida!");
+					txtDpData.requestFocus();
+				} 
+
+				// 1.4 Campo - CPF
+				if (txtDpCPF.getText().trim().length() < 10) {
+					JOptionPane.showMessageDialog(null, "Inválido - Campo de CPF incompleto ou vazio!");
+					txtDpCPF.requestFocus();
+				} 
+
+				// 1.5 Campo - Email
+				if (txtDpEmail.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira um e-mail!");
+					txtDpEmail.requestFocus();
+				} 
+
+				// 1.6 Campo - Endereço
+				if (txtDpEndereco.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira um endereço!");
+					txtDpEndereco.requestFocus();
+				} 
+
+				// 1.7 Campo - Município
+				if (txtDpMunicipio.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira um município!");
+					txtDpMunicipio.requestFocus();
+				} 
+				
+				// 1.8 Campo - Celular
+				if (txtDpCelular.getText().trim().length() < 10) {
+					JOptionPane.showMessageDialog(null, "Inválido - Campo de celular vazio ou incompleto!");
+					txtDpCelular.requestFocus();
+				}
+				
+				// 2. Método de Alterar
+					
+				try {
+					Aluno aluno = new Aluno();
+					aluno.setRgmAluno(Integer.parseInt(txtDpRGM.getText()));
+					aluno.setNomeAluno(txtDpNome.getText());
+					aluno.setDataAluno((txtDpData.getText()));
+					aluno.setCpfAluno(txtDpCPF.getText());
+					aluno.setEmailAluno(txtDpEmail.getText());
+					aluno.setEnderecoAluno(txtDpEndereco.getText());
+					aluno.setMunicipioAluno(txtDpMunicipio.getText());
+					aluno.setUfAluno((String) cmbDpUF.getSelectedItem());
+					aluno.setCelularAluno(txtDpCelular.getText());
+					aluno.setCursoAluno((String) cmbCCurso.getSelectedItem());
+					aluno.setCampusAluno((String) cmbCCampus.getSelectedItem());
+					if (rdbtnCMatutino.isSelected()) {
+						aluno.setPeriodoAluno("Matutino");
+					} else if (rdbtnCVespertino.isSelected()) {
+						aluno.setPeriodoAluno("Vespertino");
+					} else if (rdbtnCNoturno.isSelected()) {
+						aluno.setPeriodoAluno("Noturno");
+					}
+					
+					AlunoDAO dao = new AlunoDAO();
+					
+					dao.alterar(aluno);
+					JOptionPane.showMessageDialog(null, "Alterado com sucesso!");
+
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, "Erro ao alterar: " + e1.getMessage());
+				}
+		// =====================================
 			}
 		});
 		btnCAlterar.setBounds(128, 171, 80, 80);
 		panel_1.add(btnCAlterar);
 		
 		btnCConsultar = new JButton("Consultar");
+		btnCConsultar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// =====================================
+				
+				// 1. Validação do botão Consultar
+				// 1.1 Campo - RGM
+				if (txtDpRGM.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira o RGM do aluno!");
+					txtDpRGM.requestFocus();
+				} else {
+					// 2. Método de Consultar
+					try {
+						AlunoDAO dao = new AlunoDAO();
+						Aluno aluno = dao.consultar(Integer.parseInt(txtDpRGM.getText()));
+						
+						txtDpNome.setText(aluno.getNomeAluno());
+						txtDpData.setText(new SimpleDateFormat("dd/MM/yyyy").format(aluno.getDataAluno()));
+						txtDpCPF.setText(aluno.getCpfAluno());
+						txtDpEmail.setText(aluno.getEmailAluno());
+						txtDpEndereco.setText(aluno.getEnderecoAluno());
+						txtDpMunicipio.setText(aluno.getMunicipioAluno());
+				
+						String uf = aluno.getUfAluno();
+						if (uf.equals("AC")) {
+							cmbDpUF.setSelectedIndex(0);
+						} else if (uf.equals("AL")) {
+							cmbDpUF.setSelectedIndex(1);
+						} else if (uf.equals("AM")) {
+							cmbDpUF.setSelectedIndex(2);
+						} else if (uf.equals("AP")) {
+							cmbDpUF.setSelectedIndex(3);
+						}else if (uf.equals("BA")) {
+							cmbDpUF.setSelectedIndex(4);
+						}else if (uf.equals("CE")) {
+							cmbDpUF.setSelectedIndex(5);
+						}else if (uf.equals("DF")) {
+							cmbDpUF.setSelectedIndex(6);
+						}else if (uf.equals("ES")) {
+							cmbDpUF.setSelectedIndex(7);
+						}else if (uf.equals("GO")) {
+							cmbDpUF.setSelectedIndex(8);
+						}else if (uf.equals("MA")) {
+							cmbDpUF.setSelectedIndex(9);
+						}else if (uf.equals("MT")) {
+							cmbDpUF.setSelectedIndex(10);
+						}else if (uf.equals("MS")) {
+							cmbDpUF.setSelectedIndex(11);
+						}else if (uf.equals("MG")) {
+							cmbDpUF.setSelectedIndex(12);
+						}else if (uf.equals("PA")) {
+							cmbDpUF.setSelectedIndex(13);
+						}else if (uf.equals("PB")) {
+							cmbDpUF.setSelectedIndex(14);
+						}else if (uf.equals("PR")) {
+							cmbDpUF.setSelectedIndex(15);
+						}else if (uf.equals("PE")) {
+							cmbDpUF.setSelectedIndex(16);
+						}else if (uf.equals("PI")) {
+							cmbDpUF.setSelectedIndex(17);
+						}else if (uf.equals("RJ")) {
+							cmbDpUF.setSelectedIndex(18);
+						}else if (uf.equals("RN")) {
+							cmbDpUF.setSelectedIndex(19);
+						}else if (uf.equals("RS")) {
+							cmbDpUF.setSelectedIndex(20);
+						}else if (uf.equals("RO")) {
+							cmbDpUF.setSelectedIndex(21);
+						}else if (uf.equals("RR")) {
+							cmbDpUF.setSelectedIndex(22);
+						}else if (uf.equals("SC")) {
+							cmbDpUF.setSelectedIndex(23);
+						}else if (uf.equals("SP")) {
+							cmbDpUF.setSelectedIndex(24);
+						}else if (uf.equals("SE")) {
+							cmbDpUF.setSelectedIndex(25);
+						}else {
+							cmbDpUF.setSelectedIndex(26);
+						}
+
+						txtDpCelular.setText(aluno.getCelularAluno());
+						
+						String curso = aluno.getCursoAluno();
+						if (curso.equals("Análise e Desenvolvimento de Sistemas")) {
+							cmbCCurso.setSelectedIndex(0);
+						} else if (curso.equals("Ciência da Computação")) {
+							cmbCCurso.setSelectedIndex(1);
+						}else if (curso.equals("Sistemas da Informação")) {
+							cmbCCurso.setSelectedIndex(2);
+						} else {
+							cmbCCurso.setSelectedIndex(3);
+						}
+					
+						String campus = aluno.getCampusAluno();
+						if (campus.equals("EAD")) {
+							cmbCCampus.setSelectedIndex(0);
+						} else if (campus.equals("Pinheiros")) {
+							cmbCCampus.setSelectedIndex(1);
+						} else {
+							cmbCCampus.setSelectedIndex(2);
+						}
+						
+						String periodo = aluno.getPeriodoAluno();
+						if (periodo.equals("Matutino")) {
+							rdbtnCMatutino.setSelected(true);
+						} else if (periodo.equals("Vespertino")) {
+							rdbtnCVespertino.setSelected(true);
+						} else if (periodo.equals("Noturno")) {
+							rdbtnCNoturno.setSelected(true);
+						}
+
+					} catch (Exception e4) {
+						e4.printStackTrace();
+						JOptionPane.showMessageDialog(null, "Inválido - RGM inserido não está cadastrado!");
+					}
+				}
+				// =====================================
+			}
+		});
 		btnCConsultar.setBounds(231, 171, 80, 80);
 		panel_1.add(btnCConsultar);
 		
 		btnCDeletar = new JButton("Deletar");
+		btnCDeletar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// =====================================
+				// 1. Validação do botão Excluir
+				// 1.1 Campo - RGM
+				if (txtDpRGM.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira o RGM do aluno!");
+					txtDpRGM.requestFocus();
+				} else {
+					// 2. Método de Excluir
+					try {
+						AlunoDAO dao = new AlunoDAO();
+						NotaFaltaDAO daoNota = new NotaFaltaDAO();
+						
+						dao.excluir(Integer.parseInt(txtDpRGM.getText()));
+						daoNota.excluir(Integer.parseInt(txtDpRGM.getText()));
+						JOptionPane.showMessageDialog(null, "Excluído com sucesso!");
+					} catch (Exception e1) {
+						JOptionPane.showMessageDialog(null, "Erro ao Excluir" + e1.getMessage());
+					}
+				}
+				// =====================================
+			}
+		});
 		btnCDeletar.setBounds(335, 171, 80, 80);
 		panel_1.add(btnCDeletar);
 		
 		btnCLimpar = new JButton("Limpar");
+		btnCLimpar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// =====================================
+				// 1. Método de Limpar
+				txtDpRGM.setText(null);
+				txtDpNome.setText(null);
+				txtDpData.setText(null);
+				txtDpCPF.setText(null);
+				txtDpEmail.setText(null);
+				txtDpEndereco.setText(null);
+				txtDpMunicipio.setText(null);
+				cmbDpUF.setSelectedIndex(0);
+				txtDpCelular.setText(null);
+				cmbCCurso.setSelectedIndex(0);
+				cmbCCampus.setSelectedIndex(0);
+				if (rdbtnCMatutino.isSelected()) {
+					rdbtnCMatutino.setSelected(true);
+				} else if (rdbtnCVespertino.isSelected()) {
+					rdbtnCMatutino.setSelected(true);
+				} else if (rdbtnCNoturno.isSelected()) {
+					rdbtnCMatutino.setSelected(true);
+				}
+				// =====================================
+			}
+		});
 		btnCLimpar.setBounds(440, 171, 80, 80);
 		panel_1.add(btnCLimpar);
 		

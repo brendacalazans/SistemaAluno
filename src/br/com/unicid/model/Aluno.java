@@ -9,7 +9,7 @@ public class Aluno {
 	// 1. Atributos dos futuros objetos aluno
 	private int rgmAluno;
 	private String nomeAluno;
-	private Date dataAluno;
+	private Date dataAluno; 
 	private String cpfAluno;
 	private String emailAluno;
 	private String enderecoAluno;

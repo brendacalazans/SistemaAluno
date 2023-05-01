@@ -46,7 +46,7 @@ public class AlunoDAO {
 			ps.setString(6, aluno.getEnderecoAluno());
 			ps.setString(7, aluno.getMunicipioAluno());
 			ps.setString(8, aluno.getUfAluno());
-			ps.setString(9, aluno.getCampusAluno());
+			ps.setString(9, aluno.getCelularAluno());
 			ps.setString(10, aluno.getCursoAluno());
 			ps.setString(11, aluno.getCampusAluno());
 			ps.setString(12, aluno.getPeriodoAluno());
@@ -72,7 +72,7 @@ public class AlunoDAO {
 			ps.setString(5, aluno.getEnderecoAluno());
 			ps.setString(6, aluno.getMunicipioAluno());
 			ps.setString(7, aluno.getUfAluno());
-			ps.setString(8, aluno.getCampusAluno());
+			ps.setString(8, aluno.getCelularAluno());
 			ps.setString(9, aluno.getCursoAluno());
 			ps.setString(10, aluno.getCampusAluno());
 			ps.setString(11, aluno.getPeriodoAluno());
@@ -104,7 +104,7 @@ public class AlunoDAO {
 			rs = ps.executeQuery();
 			if(rs.next()) { 
 				String nomeAluno = rs.getString("NomeAluno");
-				String dataAluno = rs.getString("DataAluno");
+				Date dataAluno = rs.getDate("DataAluno");
 				String cpfAluno = rs.getString("CPFAluno");
 				String emailAluno = rs.getString("EmailAluno");
 				String enderecoAluno = rs.getString("EnderecoAluno");
@@ -115,7 +115,7 @@ public class AlunoDAO {
 				String campusAluno = rs.getString("CampusAluno");
 				String periodoAluno = rs.getString("PeriodoAluno");
 			
-				aluno = new Aluno(rgmAluno, nomeAluno, fmt.parse(dataAluno), cpfAluno, emailAluno, enderecoAluno, municipioAluno, 
+				aluno = new Aluno(rgmAluno, nomeAluno, dataAluno, cpfAluno, emailAluno, enderecoAluno, municipioAluno, 
 						ufAluno, celularAluno, cursoAluno, campusAluno, periodoAluno);
 			}
 			return aluno;
