@@ -34,7 +34,7 @@ public class AlunoDAO {
 	public void salvar(Aluno aluno) throws Exception {
 		try {
 			String sql="INSERT INTO tbAluno(RGMAluno, NomeAluno, DataAluno, CPFAluno, EmailAluno, EnderecoAluno, "
-					+ "MunicipioAluno, UFAluno, CelularAluno, CursoAluno, CampusAluno, PeriodoAluno) +"
+					+ "MunicipioAluno, UFAluno, CelularAluno, CursoAluno, CampusAluno, PeriodoAluno)"
 					+ "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			
 			ps = conn.prepareStatement(sql);

@@ -1,5 +1,7 @@
 package br.com.unicid.model;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Aluno {
@@ -57,11 +59,12 @@ public class Aluno {
 	}
 
 	public Date getDataAluno() {
-		return dataAluno;
+		java.sql.Date sqlDate = new java.sql.Date(dataAluno.getTime());
+		return sqlDate;
 	}
 
-	public void setDataAluno(Date dataAluno) {
-		this.dataAluno = dataAluno;
+	public void setDataAluno(String dataAluno) throws ParseException {
+		this.dataAluno =  new SimpleDateFormat("dd/MM/yyyy").parse(dataAluno);
 	}
 
 	public String getCpfAluno() {
