@@ -10,6 +10,8 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -36,7 +38,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 
 import br.com.unicid.dao.AlunoDAO;
-import br.com.unicid.dao.BoletimDAO;
 import br.com.unicid.dao.NotaFaltaDAO;
 import br.com.unicid.model.Aluno;
 import br.com.unicid.model.Boletim;
@@ -119,7 +120,7 @@ public class TelaPrincipal extends JFrame {
 	private JTextField txtBCurso;
 	private JLabel lblCampus_1;
 	private JTextField txtBCampus;
-	private JTable table;
+	private JTable tableBoletim;
 	private JButton btBConsultar;
 	private JButton btnBLimpar;
 	private JScrollPane spBtable;
@@ -771,7 +772,7 @@ public class TelaPrincipal extends JFrame {
 		
 		lblNfNome = new JTextField();
 		lblNfNome.setBackground(new Color(214, 214, 214));
-		lblNfNome.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, Color.GRAY, new Color(128, 128, 128)));
+		lblNfNome.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, new Color(128, 128, 128), new Color(128, 128, 128)));
 		lblNfNome.setFont(new Font("Arial", Font.PLAIN, 13));
 		lblNfNome.setColumns(10);
 		lblNfNome.setBounds(233, 12, 289, 22);
@@ -1097,6 +1098,8 @@ public class TelaPrincipal extends JFrame {
 		panel_3.add(lblNome_1);
 		
 		txtBNome = new JTextField();
+		txtBNome.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, Color.GRAY, Color.GRAY));
+		txtBNome.setBackground(new Color(202, 202, 202));
 		txtBNome.setFont(new Font("Arial", Font.PLAIN, 13));
 		txtBNome.setColumns(10);
 		txtBNome.setBounds(280, 11, 248, 22);
@@ -1108,6 +1111,8 @@ public class TelaPrincipal extends JFrame {
 		panel_3.add(lblCurso_1);
 		
 		txtBCurso = new JTextField();
+		txtBCurso.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, Color.GRAY, Color.GRAY));
+		txtBCurso.setBackground(new Color(202, 202, 202));
 		txtBCurso.setFont(new Font("Arial", Font.PLAIN, 13));
 		txtBCurso.setColumns(10);
 		txtBCurso.setBounds(67, 50, 461, 22);
@@ -1119,6 +1124,8 @@ public class TelaPrincipal extends JFrame {
 		panel_3.add(lblCampus_1);
 		
 		txtBCampus = new JTextField();
+		txtBCampus.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, Color.GRAY, Color.GRAY));
+		txtBCampus.setBackground(new Color(202, 202, 202));
 		txtBCampus.setFont(new Font("Arial", Font.PLAIN, 13));
 		txtBCampus.setColumns(10);
 		txtBCampus.setBounds(67, 92, 461, 22);
@@ -1128,9 +1135,9 @@ public class TelaPrincipal extends JFrame {
 		spBtable.setBounds(10, 130, 517, 100);
 		panel_3.add(spBtable);
 		
-		table = new JTable();
-		spBtable.setViewportView(table);
-		table.setModel(new DefaultTableModel(
+		tableBoletim = new JTable();
+		spBtable.setViewportView(tableBoletim);
+		tableBoletim.setModel(new DefaultTableModel(
 			new Object[][] {
 			},
 			new String[] {
@@ -1139,11 +1146,60 @@ public class TelaPrincipal extends JFrame {
 		));
 		
 		btBConsultar = new JButton("Consultar");
+		btBConsultar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// ==============================
+				// 1. Método de Consultar
+				try {
+					DefaultTableModel limparTabela = (DefaultTableModel) tableBoletim.getModel();
+					limparTabela.setRowCount(0);
+					
+					AlunoDAO dao = new AlunoDAO();
+					NotaFaltaDAO daoNota = new NotaFaltaDAO();
+					
+					Aluno aluno = dao.consultar(Integer.parseInt(txtBRGM.getText()));
+					
+					// 2. Listagem
+					// 2.1 Labels relacionadas ao banco de Aluno
+					txtBNome.setText(aluno.getNomeAluno());
+					txtBCurso.setText(aluno.getCursoAluno());
+					txtBCampus.setText(aluno.getCampusAluno());
+					
+					// 2.2 Campos relacionados ao banco de Notas/Boletim
+					
+					DefaultTableModel consultarTabela = (DefaultTableModel) tableBoletim.getModel();
+					List<Boletim> lista = new ArrayList<Boletim>();
+					lista = daoNota.listarNota();
+					for (Boletim notasFaltas : lista) {
+						consultarTabela.addRow(new Object[] {notasFaltas.getDisciplina(), notasFaltas.getNota(), notasFaltas.getFalta()});
+					}
+					
+					if (consultarTabela.getRowCount() == 0)
+						JOptionPane.showMessageDialog(null, "Não há nenhum boletim registrado!");
+				} catch (Exception e5) {
+					JOptionPane.showMessageDialog(null, "Erro em Consultar" + e5.getMessage());
+				}
+				// ==============================
+			}
+		});
 		btBConsultar.setFont(new Font("Arial", Font.PLAIN, 14));
 		btBConsultar.setBounds(323, 236, 129, 30);
 		panel_3.add(btBConsultar);
 		
 		btnBLimpar = new JButton("Limpar");
+		btnBLimpar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// =====================================
+				// 1. Método de Limpar
+				txtBRGM.setText(null);
+				txtBNome.setText(null);
+				txtBCurso.setText(null);
+				txtBCampus.setText(null);
+				DefaultTableModel modelLimpar = (DefaultTableModel) tableBoletim.getModel();
+				modelLimpar.setRowCount(0);
+				// =====================================
+			}
+		});
 		btnBLimpar.setFont(new Font("Arial", Font.PLAIN, 14));
 		btnBLimpar.setBounds(97, 236, 129, 30);
 		panel_3.add(btnBLimpar);

@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import br.com.unicid.model.Boletim;
 import br.com.unicid.util.ConnectionFactory;
@@ -96,6 +98,26 @@ public class NotaFaltaDAO {
 
 		} catch (Exception e) {
 			throw new Exception("Erro ao consultar: " + e.getMessage());
+		}
+	}
+	
+	public List<Boletim> listarNota() throws Exception {
+		List<Boletim> lista = new ArrayList<Boletim>();
+		try {
+			ps = conn.prepareStatement("SELECT * FROM tbBoletim");
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				int rgmAluno = rs.getInt("RGMAluno");
+				String disciplina = rs.getString("Disciplina");
+				int semestre = rs.getInt("Semestre");
+				Double nota = rs.getDouble("nota");
+				int falta = rs.getInt("falta");
+				Boletim notafalta = new Boletim(rgmAluno, disciplina, semestre, nota, falta);
+				lista.add(notafalta);
+			}
+			return lista;
+		} catch (Exception e5) {
+			throw new Exception("Erro ao listar notas: " + e5.getMessage());
 		}
 	}
 }
