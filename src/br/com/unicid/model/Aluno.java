@@ -12,18 +12,18 @@ public class Aluno {
 	private String emailAluno;
 	private String enderecoAluno;
 	private String municipioAluno;
+	private String ufAluno;
 	private String celularAluno;
 	private String cursoAluno;
 	private String campusAluno;
-	private int periodoAluno;
+	private String periodoAluno;
 	
 	// 2. Construtores com sobrecarga e com parâmetros
 	public Aluno() {
 	}
 
-	public Aluno(int rgmAluno, String nomeAluno, Date dataAluno, String cpfAluno, String emailAluno,
-			String enderecoAluno, String municipioAluno, String celularAluno, String cursoAluno, String campusAluno,
-			int periodoAluno) {
+	public Aluno(int rgmAluno, String nomeAluno, Date dataAluno, String cpfAluno, String emailAluno, String enderecoAluno,
+			String municipioAluno, String ufAluno, String celularAluno, String cursoAluno, String campusAluno, String periodoAluno) {
 		this.rgmAluno = rgmAluno;
 		this.nomeAluno = nomeAluno;
 		this.dataAluno = dataAluno;
@@ -31,6 +31,7 @@ public class Aluno {
 		this.emailAluno = emailAluno;
 		this.enderecoAluno = enderecoAluno;
 		this.municipioAluno = municipioAluno;
+		this.ufAluno = ufAluno;
 		this.celularAluno = celularAluno;
 		this.cursoAluno = cursoAluno;
 		this.campusAluno = campusAluno;
@@ -94,6 +95,14 @@ public class Aluno {
 	public void setMunicipioAluno(String municipioAluno) {
 		this.municipioAluno = municipioAluno;
 	}
+	
+	public String getUfAluno() {
+		return ufAluno;
+	}
+
+	public void setUfAluno(String ufAluno) {
+		this.ufAluno = ufAluno;
+	}
 
 	public String getCelularAluno() {
 		return celularAluno;
@@ -119,11 +128,11 @@ public class Aluno {
 		this.campusAluno = campusAluno;
 	}
 
-	public int getPeriodoAluno() {
+	public String getPeriodoAluno() {
 		return periodoAluno;
 	}
 
-	public void setPeriodoAluno(int periodoAluno) {
+	public void setPeriodoAluno(String periodoAluno) {
 		this.periodoAluno = periodoAluno;
 	}	
 }

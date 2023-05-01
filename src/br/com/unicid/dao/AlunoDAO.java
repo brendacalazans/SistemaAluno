@@ -34,8 +34,8 @@ public class AlunoDAO {
 	public void salvar(Aluno aluno) throws Exception {
 		try {
 			String sql="INSERT INTO tbAluno(RGMAluno, NomeAluno, DataAluno, CPFAluno, EmailAluno, EnderecoAluno, "
-					+ "MunicipioAluno, CelularAluno, CursoAluno, CampusAluno, PeriodoAluno) +"
-					+ "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+					+ "MunicipioAluno, UFAluno, CelularAluno, CursoAluno, CampusAluno, PeriodoAluno) +"
+					+ "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, aluno.getRgmAluno());
@@ -45,10 +45,11 @@ public class AlunoDAO {
 			ps.setString(5, aluno.getEmailAluno());
 			ps.setString(6, aluno.getEnderecoAluno());
 			ps.setString(7, aluno.getMunicipioAluno());
-			ps.setString(8, aluno.getCampusAluno());
-			ps.setString(9, aluno.getCursoAluno());
-			ps.setString(10, aluno.getCampusAluno());
-			ps.setInt(11, aluno.getPeriodoAluno());
+			ps.setString(8, aluno.getUfAluno());
+			ps.setString(9, aluno.getCampusAluno());
+			ps.setString(10, aluno.getCursoAluno());
+			ps.setString(11, aluno.getCampusAluno());
+			ps.setString(12, aluno.getPeriodoAluno());
 			ps.executeUpdate();
 			
 		} catch(Exception e) {
@@ -61,7 +62,7 @@ public class AlunoDAO {
 	public void alterar(Aluno aluno) throws Exception {
 		try {
 			String sql="UPDATE tbAluno SET NomeAluno=?, DataAluno=?, CPFAluno=?, EmailAluno=?, EnderecoAluno=?, "
-					+ "MunicipioAluno=?, CelularAluno=?, CursoAluno=?, CampusAluno=?, PeriodoAluno=? WHERE RGMAluno=?";
+					+ "MunicipioAluno=?, UFAluno=?, CelularAluno=?, CursoAluno=?, CampusAluno=?, PeriodoAluno=? WHERE RGMAluno=?";
 			
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, aluno.getNomeAluno());
@@ -70,11 +71,12 @@ public class AlunoDAO {
 			ps.setString(4, aluno.getEmailAluno());
 			ps.setString(5, aluno.getEnderecoAluno());
 			ps.setString(6, aluno.getMunicipioAluno());
-			ps.setString(7, aluno.getCampusAluno());
-			ps.setString(8, aluno.getCursoAluno());
-			ps.setString(9, aluno.getCampusAluno());
-			ps.setInt(10, aluno.getPeriodoAluno());
-			ps.setInt(11, aluno.getRgmAluno());
+			ps.setString(7, aluno.getUfAluno());
+			ps.setString(8, aluno.getCampusAluno());
+			ps.setString(9, aluno.getCursoAluno());
+			ps.setString(10, aluno.getCampusAluno());
+			ps.setString(11, aluno.getPeriodoAluno());
+			ps.setInt(12, aluno.getRgmAluno());
 			ps.executeUpdate();
 			
 		} catch(Exception e) {
@@ -107,13 +109,14 @@ public class AlunoDAO {
 				String emailAluno = rs.getString("EmailAluno");
 				String enderecoAluno = rs.getString("EnderecoAluno");
 				String municipioAluno = rs.getString("MunicipioAluno");
+				String ufAluno = rs.getString("UFAluno");
 				String celularAluno = rs.getString("CelularAluno");
 				String cursoAluno = rs.getString("CursoAluno");
 				String campusAluno = rs.getString("CampusAluno");
-				int periodoAluno = rs.getInt("PeriodoAluno");
+				String periodoAluno = rs.getString("PeriodoAluno");
 			
 				aluno = new Aluno(rgmAluno, nomeAluno, fmt.parse(dataAluno), cpfAluno, emailAluno, enderecoAluno, municipioAluno, 
-						celularAluno, cursoAluno, campusAluno, periodoAluno);
+						ufAluno, celularAluno, cursoAluno, campusAluno, periodoAluno);
 			}
 			return aluno;
 			

@@ -1,38 +1,47 @@
 package br.com.unicid.view;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.SwingConstants;
-import javax.swing.KeyStroke;
-import java.awt.event.KeyEvent;
-import java.awt.event.InputEvent;
-import javax.swing.JSeparator;
-import java.awt.Insets;
-import javax.swing.JLabel;
-import com.jgoodies.forms.factories.DefaultComponentFactory;
-import java.awt.Component;
-import javax.swing.JTabbedPane;
-import java.awt.Font;
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
-import javax.swing.JButton;
-import javax.swing.JRadioButton;
-import javax.swing.border.BevelBorder;
 import java.awt.Color;
-import java.awt.Panel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
+import java.awt.Component;
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+import javax.swing.SwingConstants;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.text.MaskFormatter;
+
+import br.com.unicid.dao.AlunoDAO;
+import br.com.unicid.model.Aluno;
 
 public class TelaPrincipal extends JFrame {
 
+	SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
+	
 	private JPanel contentPane;
 	private JMenuBar menuBar;
 	private JMenu mnNewMenu;
@@ -134,8 +143,9 @@ public class TelaPrincipal extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @throws ParseException 
 	 */
-	public TelaPrincipal() {
+	public TelaPrincipal() throws ParseException {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 581, 412);
 		
@@ -276,6 +286,7 @@ public class TelaPrincipal extends JFrame {
 		panel.add(lblUf);
 		
 		cmbDpUF = new JComboBox();
+		cmbDpUF.setModel(new DefaultComboBoxModel(new String[] {"AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"}));
 		cmbDpUF.setBounds(267, 179, 43, 22);
 		panel.add(cmbDpUF);
 		
@@ -289,15 +300,15 @@ public class TelaPrincipal extends JFrame {
 		btnDpLimpar.setBounds(399, 223, 129, 30);
 		panel.add(btnDpLimpar);
 		
-		txtDpCPF = new JFormattedTextField();
+		txtDpCPF = new JFormattedTextField(new MaskFormatter("###.###.###-##"));
 		txtDpCPF.setBounds(346, 51, 182, 22);
 		panel.add(txtDpCPF);
 		
-		txtDpCelular = new JFormattedTextField();
+		txtDpCelular = new JFormattedTextField(new MaskFormatter("## #####-####"));
 		txtDpCelular.setBounds(389, 180, 139, 22);
 		panel.add(txtDpCelular);
 		
-		txtDpData = new JFormattedTextField();
+		txtDpData = new JFormattedTextField(new MaskFormatter("##/##/####"));
 		txtDpData.setBounds(147, 51, 139, 22);
 		panel.add(txtDpData);
 		
@@ -311,6 +322,7 @@ public class TelaPrincipal extends JFrame {
 		panel_1.add(lblCurso);
 		
 		cmbCCurso = new JComboBox();
+		cmbCCurso.setModel(new DefaultComboBoxModel(new String[] {"Análise e Desenvolvimento de Sistemas", "Ciência da Computação", "Sistemas da Informação", "Tecnologia da Informação"}));
 		cmbCCurso.setFont(new Font("Arial", Font.PLAIN, 14));
 		cmbCCurso.setBounds(94, 18, 433, 30);
 		panel_1.add(cmbCCurso);
@@ -321,6 +333,7 @@ public class TelaPrincipal extends JFrame {
 		panel_1.add(lblCampus);
 		
 		cmbCCampus = new JComboBox();
+		cmbCCampus.setModel(new DefaultComboBoxModel(new String[] {"EAD", "Pinheiros", "Tatuapé"}));
 		cmbCCampus.setFont(new Font("Arial", Font.PLAIN, 14));
 		cmbCCampus.setBounds(94, 69, 433, 30);
 		panel_1.add(cmbCCampus);
@@ -345,23 +358,117 @@ public class TelaPrincipal extends JFrame {
 		rdbtnCNoturno.setBounds(362, 127, 109, 23);
 		panel_1.add(rdbtnCNoturno);
 		
-		btnCSalvar = new JButton("New button");
+		btnCSalvar = new JButton("Salvar");
+		btnCSalvar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// =====================================
+				// 1. Validação do botão Salvar
+
+				// 1.1 Campo - RGM
+				if (txtDpRGM.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira o RGM do aluno!");
+					txtDpRGM.requestFocus();
+				} 
+
+				// 1.2 Campo - Nome
+				if (txtDpNome.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira o nome do aluno!");
+					txtDpNome.requestFocus();
+				} else if (txtDpNome.getText().length() < 3) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira mais caracteres para formar um nome!");
+					txtDpNome.requestFocus();
+				}
+
+				// 1.3 Campo - Data Nascimento
+				if (txtDpData.getText().trim().length() != 10) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira uma data de nascimento válida!");
+					txtDpData.requestFocus();
+				} 
+
+				// 1.4 Campo - CPF
+				if (txtDpCPF.getText().trim().length() < 10) {
+					JOptionPane.showMessageDialog(null, "Inválido - Campo de CPF incompleto ou vazio!");
+					txtDpCPF.requestFocus();
+				} 
+
+				// 1.5 Campo - Email
+				if (txtDpEmail.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira um e-mail!");
+					txtDpEmail.requestFocus();
+				} 
+
+				// 1.6 Campo - Endereço
+				if (txtDpEndereco.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira um endereço!");
+					txtDpEndereco.requestFocus();
+				} 
+
+				// 1.7 Campo - Município
+				if (txtDpMunicipio.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira um município!");
+					txtDpMunicipio.requestFocus();
+				} 
+				
+				// 1.8 Campo - Celular
+				if (txtDpCelular.getText().trim().length() < 10) {
+					JOptionPane.showMessageDialog(null, "Inválido - Campo de celular vazio ou incompleto!");
+					txtDpCelular.requestFocus();
+				}
+				
+				// 2. Método de Salvar
+					
+				try {
+					Aluno aluno = new Aluno();
+					aluno.setRgmAluno(Integer.parseInt(txtDpRGM.getText()));
+					aluno.setNomeAluno(txtDpNome.getText());
+					aluno.setDataAluno((txtDpData.getText()));
+					aluno.setCpfAluno(txtDpCPF.getText());
+					aluno.setEmailAluno(txtDpEmail.getText());
+					aluno.setEnderecoAluno(txtDpEndereco.getText());
+					aluno.setMunicipioAluno(txtDpMunicipio.getText());
+					aluno.setUfAluno((String) cmbDpUF.getSelectedItem());
+					aluno.setCelularAluno(txtDpCelular.getText());
+					aluno.setCursoAluno((String) cmbCCurso.getSelectedItem());
+					aluno.setCampusAluno((String) cmbCCampus.getSelectedItem());
+					if (rdbtnCMatutino.isSelected()) {
+						aluno.setPeriodoAluno("Matutino");
+					} else if (rdbtnCVespertino.isSelected()) {
+						aluno.setPeriodoAluno("Vespertino");
+					} else if (rdbtnCNoturno.isSelected()) {
+						aluno.setPeriodoAluno("Noturno");
+					}
+					// 2.1 Abre conexão
+					AlunoDAO dao = new AlunoDAO();
+					// 2.2 Salva
+					dao.salvar(aluno);
+					JOptionPane.showMessageDialog(null, "Salvo com sucesso!");
+
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, "Erro ao salvar: " + e1.getMessage());
+				}
+		// =====================================
+			}
+		});
 		btnCSalvar.setBounds(27, 171, 80, 80);
 		panel_1.add(btnCSalvar);
 		
-		btnCAlterar = new JButton("New button");
+		btnCAlterar = new JButton("Alterar");
+		btnCAlterar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		btnCAlterar.setBounds(128, 171, 80, 80);
 		panel_1.add(btnCAlterar);
 		
-		btnCConsultar = new JButton("New button");
+		btnCConsultar = new JButton("Consultar");
 		btnCConsultar.setBounds(231, 171, 80, 80);
 		panel_1.add(btnCConsultar);
 		
-		btnCDeletar = new JButton("New button");
+		btnCDeletar = new JButton("Deletar");
 		btnCDeletar.setBounds(335, 171, 80, 80);
 		panel_1.add(btnCDeletar);
 		
-		btnCLimpar = new JButton("New button");
+		btnCLimpar = new JButton("Limpar");
 		btnCLimpar.setBounds(440, 171, 80, 80);
 		panel_1.add(btnCLimpar);
 		
@@ -402,6 +509,7 @@ public class TelaPrincipal extends JFrame {
 		panel_2.add(lblNewLabel_2);
 		
 		lblNfDisciplina = new JComboBox();
+		lblNfDisciplina.setModel(new DefaultComboBoxModel(new String[] {"Programação Orientada à Objetos", "Técnicas de Algoritmos", "Técnicas de Programação"}));
 		lblNfDisciplina.setFont(new Font("Arial", Font.PLAIN, 14));
 		lblNfDisciplina.setBounds(89, 83, 433, 25);
 		panel_2.add(lblNfDisciplina);
@@ -412,6 +520,7 @@ public class TelaPrincipal extends JFrame {
 		panel_2.add(lblNewLabel_3);
 		
 		lblcmbNfSemestre = new JComboBox();
+		lblcmbNfSemestre.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}));
 		lblcmbNfSemestre.setFont(new Font("Arial", Font.PLAIN, 14));
 		lblcmbNfSemestre.setBounds(89, 131, 117, 25);
 		panel_2.add(lblcmbNfSemestre);
@@ -422,6 +531,7 @@ public class TelaPrincipal extends JFrame {
 		panel_2.add(lblNewLabel_4);
 		
 		lblcmbNfNotas = new JComboBox();
+		lblcmbNfNotas.setModel(new DefaultComboBoxModel(new String[] {"0,0", "0,5", "1,0", "1,5", "2,0", "2,5", "3,0", "3,5", "4,0", "4,5", "5,0", "5,5", "6,0", "6,5", "7,0", "7,5", "8,0", "8,5", "9,0", "9,5", "10,0"}));
 		lblcmbNfNotas.setFont(new Font("Arial", Font.PLAIN, 14));
 		lblcmbNfNotas.setBounds(278, 131, 83, 25);
 		panel_2.add(lblcmbNfNotas);
@@ -432,6 +542,7 @@ public class TelaPrincipal extends JFrame {
 		panel_2.add(lblNewLabel_5);
 		
 		lblcmbNfFaltas = new JComboBox();
+		lblcmbNfFaltas.setModel(new DefaultComboBoxModel(new String[] {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"}));
 		lblcmbNfFaltas.setFont(new Font("Arial", Font.PLAIN, 14));
 		lblcmbNfFaltas.setBounds(439, 131, 83, 25);
 		panel_2.add(lblcmbNfFaltas);

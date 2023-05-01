@@ -46,13 +46,14 @@ public class BoletimDAO {
 				String emailAluno = rs.getString("EmailAluno");
 				String enderecoAluno = rs.getString("EnderecoAluno");
 				String municipioAluno = rs.getString("MunicipioAluno");
+				String ufAluno = rs.getString("UFAluno");
 				String celularAluno = rs.getString("CelularAluno");
 				String cursoAluno = rs.getString("CursoAluno");
 				String campusAluno = rs.getString("CampusAluno");
-				int periodoAluno = rs.getInt("PeriodoAluno");
+				String periodoAluno = rs.getString("PeriodoAluno");
 
 				aluno = new Aluno(rgmAluno, nomeAluno, fmt.parse(dataAluno), cpfAluno, emailAluno, enderecoAluno, municipioAluno, 
-						celularAluno, cursoAluno, campusAluno, periodoAluno);
+						ufAluno, celularAluno, cursoAluno, campusAluno, periodoAluno);
 			}
 			return aluno;
 
