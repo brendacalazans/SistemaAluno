@@ -160,23 +160,361 @@ public class TelaPrincipal extends JFrame {
 		menuBar.add(mnNewMenu);
 		
 		mntmNewMenuItem = new JMenuItem("Salvar");
+		mntmNewMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// =====================================
+				// 1. Validação do menu Salvar
+
+				// 1.1 Campo - RGM
+				if (txtDpRGM.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira o RGM do aluno!");
+					txtDpRGM.requestFocus();
+				} 
+
+				// 1.2 Campo - Nome
+				if (txtDpNome.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira o nome do aluno!");
+					txtDpNome.requestFocus();
+				} else if (txtDpNome.getText().length() < 3) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira mais caracteres para formar um nome!");
+					txtDpNome.requestFocus();
+				}
+
+				// 1.3 Campo - Data Nascimento
+				if (txtDpData.getText().trim().length() != 10) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira uma data de nascimento válida!");
+					txtDpData.requestFocus();
+				} 
+
+				// 1.4 Campo - CPF
+				if (txtDpCPF.getText().trim().length() < 10) {
+					JOptionPane.showMessageDialog(null, "Inválido - Campo de CPF incompleto ou vazio!");
+					txtDpCPF.requestFocus();
+				} 
+
+				// 1.5 Campo - Email
+				if (txtDpEmail.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira um e-mail!");
+					txtDpEmail.requestFocus();
+				} 
+
+				// 1.6 Campo - Endereço
+				if (txtDpEndereco.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira um endereço!");
+					txtDpEndereco.requestFocus();
+				} 
+
+				// 1.7 Campo - Município
+				if (txtDpMunicipio.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira um município!");
+					txtDpMunicipio.requestFocus();
+				} 
+				
+				// 1.8 Campo - Celular
+				if (txtDpCelular.getText().trim().length() < 10) {
+					JOptionPane.showMessageDialog(null, "Inválido - Campo de celular vazio ou incompleto!");
+					txtDpCelular.requestFocus();
+				}
+				
+				// 2. Método de Salvar
+					
+				try {
+					Aluno aluno = new Aluno();
+					aluno.setRgmAluno(Integer.parseInt(txtDpRGM.getText()));
+					aluno.setNomeAluno(txtDpNome.getText());
+					aluno.setDataAluno((txtDpData.getText()));
+					aluno.setCpfAluno(txtDpCPF.getText());
+					aluno.setEmailAluno(txtDpEmail.getText());
+					aluno.setEnderecoAluno(txtDpEndereco.getText());
+					aluno.setMunicipioAluno(txtDpMunicipio.getText());
+					aluno.setUfAluno((String) cmbDpUF.getSelectedItem());
+					aluno.setCelularAluno(txtDpCelular.getText());
+					aluno.setCursoAluno((String) cmbCCurso.getSelectedItem());
+					aluno.setCampusAluno((String) cmbCCampus.getSelectedItem());
+					if (rdbtnCMatutino.isSelected()) {
+						aluno.setPeriodoAluno("Matutino");
+					} else if (rdbtnCVespertino.isSelected()) {
+						aluno.setPeriodoAluno("Vespertino");
+					} else if (rdbtnCNoturno.isSelected()) {
+						aluno.setPeriodoAluno("Noturno");
+					}
+					// 2.1 Abre conexão
+					AlunoDAO dao = new AlunoDAO();
+					// 2.2 Salva
+					dao.salvar(aluno);
+					JOptionPane.showMessageDialog(null, "Salvo com sucesso!");
+
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, "Erro ao salvar: " + e1.getMessage());
+				}
+		// =====================================
+			}
+		});
 		mntmNewMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 		mntmNewMenuItem.setHorizontalAlignment(SwingConstants.LEFT);
 		mnNewMenu.add(mntmNewMenuItem);
 		
 		mntmNewMenuItem_1 = new JMenuItem("Alterar");
+		mntmNewMenuItem_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// =====================================
+				// 1. Validação do menu Alterar
+
+				// 1.1 Campo - RGM
+				if (txtDpRGM.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira o RGM do aluno!");
+					txtDpRGM.requestFocus();
+				} 
+
+				// 1.2 Campo - Nome
+				if (txtDpNome.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira o nome do aluno!");
+					txtDpNome.requestFocus();
+				} else if (txtDpNome.getText().length() < 3) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira mais caracteres para formar um nome!");
+					txtDpNome.requestFocus();
+				}
+
+				// 1.3 Campo - Data Nascimento
+				if (txtDpData.getText().trim().length() != 10) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira uma data de nascimento válida!");
+					txtDpData.requestFocus();
+				} 
+
+				// 1.4 Campo - CPF
+				if (txtDpCPF.getText().trim().length() < 10) {
+					JOptionPane.showMessageDialog(null, "Inválido - Campo de CPF incompleto ou vazio!");
+					txtDpCPF.requestFocus();
+				} 
+
+				// 1.5 Campo - Email
+				if (txtDpEmail.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira um e-mail!");
+					txtDpEmail.requestFocus();
+				} 
+
+				// 1.6 Campo - Endereço
+				if (txtDpEndereco.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira um endereço!");
+					txtDpEndereco.requestFocus();
+				} 
+
+				// 1.7 Campo - Município
+				if (txtDpMunicipio.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira um município!");
+					txtDpMunicipio.requestFocus();
+				} 
+				
+				// 1.8 Campo - Celular
+				if (txtDpCelular.getText().trim().length() < 10) {
+					JOptionPane.showMessageDialog(null, "Inválido - Campo de celular vazio ou incompleto!");
+					txtDpCelular.requestFocus();
+				}
+				
+				// 2. Método de Alterar
+					
+				try {
+					Aluno aluno = new Aluno();
+					aluno.setRgmAluno(Integer.parseInt(txtDpRGM.getText()));
+					aluno.setNomeAluno(txtDpNome.getText());
+					aluno.setDataAluno((txtDpData.getText()));
+					aluno.setCpfAluno(txtDpCPF.getText());
+					aluno.setEmailAluno(txtDpEmail.getText());
+					aluno.setEnderecoAluno(txtDpEndereco.getText());
+					aluno.setMunicipioAluno(txtDpMunicipio.getText());
+					aluno.setUfAluno((String) cmbDpUF.getSelectedItem());
+					aluno.setCelularAluno(txtDpCelular.getText());
+					aluno.setCursoAluno((String) cmbCCurso.getSelectedItem());
+					aluno.setCampusAluno((String) cmbCCampus.getSelectedItem());
+					if (rdbtnCMatutino.isSelected()) {
+						aluno.setPeriodoAluno("Matutino");
+					} else if (rdbtnCVespertino.isSelected()) {
+						aluno.setPeriodoAluno("Vespertino");
+					} else if (rdbtnCNoturno.isSelected()) {
+						aluno.setPeriodoAluno("Noturno");
+					}
+					
+					AlunoDAO dao = new AlunoDAO();
+					
+					dao.alterar(aluno);
+					JOptionPane.showMessageDialog(null, "Alterado com sucesso!");
+
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, "Erro ao alterar: " + e1.getMessage());
+				}
+		// =====================================
+			}
+		});
 		mnNewMenu.add(mntmNewMenuItem_1);
 		
 		mntmNewMenuItem_2 = new JMenuItem("Consultar");
+		mntmNewMenuItem_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// =====================================
+				
+				// 1. Validação do botão Consultar
+				// 1.1 Campo - RGM
+				if (txtDpRGM.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira o RGM do aluno!");
+					txtDpRGM.requestFocus();
+				} else {
+					// 2. Método de Consultar
+					try {
+						AlunoDAO dao = new AlunoDAO();
+						Aluno aluno = dao.consultar(Integer.parseInt(txtDpRGM.getText()));
+						
+						txtDpNome.setText(aluno.getNomeAluno());
+						txtDpData.setText(new SimpleDateFormat("dd/MM/yyyy").format(aluno.getDataAluno()));
+						txtDpCPF.setText(aluno.getCpfAluno());
+						txtDpEmail.setText(aluno.getEmailAluno());
+						txtDpEndereco.setText(aluno.getEnderecoAluno());
+						txtDpMunicipio.setText(aluno.getMunicipioAluno());
+				
+						String uf = aluno.getUfAluno();
+						if (uf.equals("AC")) {
+							cmbDpUF.setSelectedIndex(0);
+						} else if (uf.equals("AL")) {
+							cmbDpUF.setSelectedIndex(1);
+						} else if (uf.equals("AM")) {
+							cmbDpUF.setSelectedIndex(2);
+						} else if (uf.equals("AP")) {
+							cmbDpUF.setSelectedIndex(3);
+						}else if (uf.equals("BA")) {
+							cmbDpUF.setSelectedIndex(4);
+						}else if (uf.equals("CE")) {
+							cmbDpUF.setSelectedIndex(5);
+						}else if (uf.equals("DF")) {
+							cmbDpUF.setSelectedIndex(6);
+						}else if (uf.equals("ES")) {
+							cmbDpUF.setSelectedIndex(7);
+						}else if (uf.equals("GO")) {
+							cmbDpUF.setSelectedIndex(8);
+						}else if (uf.equals("MA")) {
+							cmbDpUF.setSelectedIndex(9);
+						}else if (uf.equals("MT")) {
+							cmbDpUF.setSelectedIndex(10);
+						}else if (uf.equals("MS")) {
+							cmbDpUF.setSelectedIndex(11);
+						}else if (uf.equals("MG")) {
+							cmbDpUF.setSelectedIndex(12);
+						}else if (uf.equals("PA")) {
+							cmbDpUF.setSelectedIndex(13);
+						}else if (uf.equals("PB")) {
+							cmbDpUF.setSelectedIndex(14);
+						}else if (uf.equals("PR")) {
+							cmbDpUF.setSelectedIndex(15);
+						}else if (uf.equals("PE")) {
+							cmbDpUF.setSelectedIndex(16);
+						}else if (uf.equals("PI")) {
+							cmbDpUF.setSelectedIndex(17);
+						}else if (uf.equals("RJ")) {
+							cmbDpUF.setSelectedIndex(18);
+						}else if (uf.equals("RN")) {
+							cmbDpUF.setSelectedIndex(19);
+						}else if (uf.equals("RS")) {
+							cmbDpUF.setSelectedIndex(20);
+						}else if (uf.equals("RO")) {
+							cmbDpUF.setSelectedIndex(21);
+						}else if (uf.equals("RR")) {
+							cmbDpUF.setSelectedIndex(22);
+						}else if (uf.equals("SC")) {
+							cmbDpUF.setSelectedIndex(23);
+						}else if (uf.equals("SP")) {
+							cmbDpUF.setSelectedIndex(24);
+						}else if (uf.equals("SE")) {
+							cmbDpUF.setSelectedIndex(25);
+						}else {
+							cmbDpUF.setSelectedIndex(26);
+						}
+
+						txtDpCelular.setText(aluno.getCelularAluno());
+						
+						String curso = aluno.getCursoAluno();
+						if (curso.equals("Análise e Desenvolvimento de Sistemas")) {
+							cmbCCurso.setSelectedIndex(0);
+						} else if (curso.equals("Ciência da Computação")) {
+							cmbCCurso.setSelectedIndex(1);
+						}else if (curso.equals("Sistemas da Informação")) {
+							cmbCCurso.setSelectedIndex(2);
+						} else {
+							cmbCCurso.setSelectedIndex(3);
+						}
+					
+						String campus = aluno.getCampusAluno();
+						if (campus.equals("EAD")) {
+							cmbCCampus.setSelectedIndex(0);
+						} else if (campus.equals("Pinheiros")) {
+							cmbCCampus.setSelectedIndex(1);
+						} else {
+							cmbCCampus.setSelectedIndex(2);
+						}
+						
+						rdbtnCMatutino.setSelected(false);
+						rdbtnCVespertino.setSelected(false);
+						rdbtnCNoturno.setSelected(false);
+						
+						String periodo = aluno.getPeriodoAluno();
+						if (periodo.equals("Matutino")) {
+							rdbtnCMatutino.setSelected(true);
+						} else if (periodo.equals("Vespertino")) {
+							rdbtnCVespertino.setSelected(true);
+						} else if (periodo.equals("Noturno")) {
+							rdbtnCNoturno.setSelected(true);
+						}
+
+					} catch (Exception e4) {
+						e4.printStackTrace();
+						JOptionPane.showMessageDialog(null, "Inválido - RGM inserido não está cadastrado!");
+					}
+				}
+				// =====================================
+			}
+		});
 		mnNewMenu.add(mntmNewMenuItem_2);
 		
 		mntmNewMenuItem_3 = new JMenuItem("Excluir");
+		mntmNewMenuItem_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// =====================================
+				// 1. Validação do menu Excluir
+				// 1.1 Campo - RGM
+				if (txtDpRGM.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira o RGM do aluno!");
+					txtDpRGM.requestFocus();
+				} else {
+					// 2. Método de Excluir
+					try {
+						AlunoDAO dao = new AlunoDAO();
+						NotaFaltaDAO daoNota = new NotaFaltaDAO();
+						
+						dao.excluir(Integer.parseInt(txtDpRGM.getText()));
+						daoNota.excluir(Integer.parseInt(txtDpRGM.getText()));
+						JOptionPane.showMessageDialog(null, "Excluído com sucesso!");
+					} catch (Exception e1) {
+						JOptionPane.showMessageDialog(null, "Erro ao Excluir" + e1.getMessage());
+					}
+				}
+				// =====================================
+			}
+		});
 		mnNewMenu.add(mntmNewMenuItem_3);
 		
 		separator = new JSeparator();
 		mnNewMenu.add(separator);
 		
 		mntmNewMenuItem_4 = new JMenuItem("Sair");
+		mntmNewMenuItem_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// =====================================
+				Object[] simNao = { "Sim", "Não" };
+	
+				int escolha = JOptionPane.showOptionDialog(null, "Deseja sair do sistema?", "Sair",
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, simNao, simNao[1]);
+				if (escolha == 0)
+					System.exit(0);
+				// =====================================
+			}
+		});
 		mntmNewMenuItem_4.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.SHIFT_DOWN_MASK));
 		mnNewMenu.add(mntmNewMenuItem_4);
 		
@@ -184,23 +522,242 @@ public class TelaPrincipal extends JFrame {
 		menuBar.add(mnNewMenu_1);
 		
 		mntmNewMenuItem_5 = new JMenuItem("Salvar");
+		mntmNewMenuItem_5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// =====================================
+				// 1. Validação do menu Salvar
+
+				// 1.1 Campo - RGM
+				if (txtNfRGM.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira o RGM do aluno!");
+					txtNfRGM.requestFocus();
+				} 
+
+				// 1.2 Campo - Falta
+				if (lblNfFaltas.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira o número de faltas");
+					lblNfFaltas.requestFocus();
+				} 
+				// 2. Método de Salvar
+					
+				try {
+					Boletim boletim = new Boletim();
+					boletim.setRgmAluno(Integer.parseInt(txtNfRGM.getText()));
+					boletim.setDisciplina((String) lblNfDisciplina.getSelectedItem());
+					boletim.setSemestre(Integer.parseInt((String) lblcmbNfSemestre.getSelectedItem()));
+					boletim.setNota(Double.parseDouble((String) lblcmbNfNotas.getSelectedItem()));
+					boletim.setFalta(Integer.parseInt(lblNfFaltas.getText()));
+					
+					NotaFaltaDAO dao = new NotaFaltaDAO();
+					
+					dao.salvar(boletim);
+					JOptionPane.showMessageDialog(null, "Salvo com sucesso!");
+
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, "Erro ao Salvar: " + e1.getMessage());
+				}
+		// =====================================
+			}
+		});
 		mntmNewMenuItem_5.setHorizontalAlignment(SwingConstants.LEFT);
 		mnNewMenu_1.add(mntmNewMenuItem_5);
 		
 		mntmNewMenuItem_6 = new JMenuItem("Alterar");
+		mntmNewMenuItem_6.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// =====================================
+				// 1. Validação do menu Alterar
+
+				// 1.1 Campo - RGM
+				if (txtNfRGM.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira o RGM do aluno!");
+					txtNfRGM.requestFocus();
+				} 
+
+				// 1.2 Campo - Falta
+				if (lblNfFaltas.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira o número de faltas");
+					lblNfFaltas.requestFocus();
+				} 
+				// 2. Método de Alterar
+					
+				try {
+					Boletim boletim = new Boletim();
+					boletim.setRgmAluno(Integer.parseInt(txtNfRGM.getText()));
+					boletim.setDisciplina((String) lblNfDisciplina.getSelectedItem());
+					boletim.setSemestre(Integer.parseInt((String) lblcmbNfSemestre.getSelectedItem()));
+					boletim.setNota(Double.parseDouble((String) lblcmbNfNotas.getSelectedItem()));
+					boletim.setFalta(Integer.parseInt(lblNfFaltas.getText()));
+					
+					NotaFaltaDAO dao = new NotaFaltaDAO();
+					
+					dao.alterar(boletim);
+					JOptionPane.showMessageDialog(null, "Alterado com sucesso!");
+
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, "Erro ao alterar: " + e1.getMessage());
+				}
+		// =====================================
+			}
+		});
 		mntmNewMenuItem_6.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK));
 		mnNewMenu_1.add(mntmNewMenuItem_6);
 		
 		mntmNewMenuItem_7 = new JMenuItem("Excluir");
+		mntmNewMenuItem_7.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// =====================================
+				// 1. Validação do menu Excluir
+
+				// 1.1 Campo - RGM
+				if (txtNfRGM.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira o RGM do aluno!");
+					txtNfRGM.requestFocus();
+				} 
+
+				// 2. Método de Excluir
+					
+				try {
+					
+					NotaFaltaDAO daoNota = new NotaFaltaDAO();
+					
+					daoNota.excluir(Integer.parseInt(txtNfRGM.getText()));
+					JOptionPane.showMessageDialog(null, "Excluido com sucesso!");
+
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, "Erro ao excluir: " + e1.getMessage());
+				}
+		// =====================================
+			}
+		});
 		mnNewMenu_1.add(mntmNewMenuItem_7);
 		
 		mntmNewMenuItem_8 = new JMenuItem("Consultar");
+		mntmNewMenuItem_8.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+// =====================================
+				
+				// 1. Validação do menu Consultar
+				// 1.1 Campo - RGM
+				if (txtNfRGM.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Inválido - Insira o RGM do aluno!");
+					txtNfRGM.requestFocus();
+				} else {
+					// 2. Método de Consultar
+					try {
+						AlunoDAO dao = new AlunoDAO();
+						NotaFaltaDAO dao2 = new NotaFaltaDAO();
+						Aluno aluno = dao.consultar(Integer.parseInt(txtNfRGM.getText()));
+						Boletim boletim = dao2.consultar(Integer.parseInt(txtNfRGM.getText()));
+						
+						// 2.1 Labels relacionadas ao banco de Aluno
+						lblNfNome.setText(aluno.getNomeAluno());
+						lblNfCurso.setText(aluno.getCursoAluno());
+						
+						// 2.2 Campos relacionados ao banco de Notas/Boletim
+		
+				
+						String disciplina = boletim.getDisciplina();
+						if (disciplina.equals("Programação Orientada à Objetos")) {
+							lblNfDisciplina.setSelectedIndex(0);
+						} else if (disciplina.equals("Técnicas de Algoritmos")) {
+							lblNfDisciplina.setSelectedIndex(1);
+						} else {
+							lblNfDisciplina.setSelectedIndex(2);
+						}
+						
+						int semestre = boletim.getSemestre();
+						if (semestre == 1) {
+							lblcmbNfSemestre.setSelectedIndex(0);
+						} else if (semestre == 2) {
+							lblcmbNfSemestre.setSelectedIndex(1);
+						}else if (semestre == 3) {
+							lblcmbNfSemestre.setSelectedIndex(2);
+						}else if (semestre == 4) {
+							lblcmbNfSemestre.setSelectedIndex(3);
+						}else if (semestre == 5) {
+							lblcmbNfSemestre.setSelectedIndex(4);
+						}else if (semestre == 6) {
+							lblcmbNfSemestre.setSelectedIndex(5);
+						}else if (semestre == 7) {
+							lblcmbNfSemestre.setSelectedIndex(6);
+						}else if (semestre == 8) {
+							lblcmbNfSemestre.setSelectedIndex(7);
+						}else if (semestre == 9) {
+							lblcmbNfSemestre.setSelectedIndex(8);
+						} else {
+							lblcmbNfSemestre.setSelectedIndex(9);
+						}
+
+						double nota = boletim.getNota();
+						if (nota == 0) {
+							lblcmbNfNotas.setSelectedIndex(0);
+						} else if (nota == 0.5) {
+							lblcmbNfNotas.setSelectedIndex(1);
+						}else if (nota == 1) {
+							lblcmbNfNotas.setSelectedIndex(2);
+						}else if (nota == 1.5) {
+							lblcmbNfNotas.setSelectedIndex(3);
+						}else if (nota == 2) {
+							lblcmbNfNotas.setSelectedIndex(4);
+						}else if (nota == 2.5) {
+							lblcmbNfNotas.setSelectedIndex(5);
+						}else if (nota == 3) {
+							lblcmbNfNotas.setSelectedIndex(6);
+						}else if (nota == 3.5) {
+							lblcmbNfNotas.setSelectedIndex(7);
+						}else if (nota == 4) {
+							lblcmbNfNotas.setSelectedIndex(8);
+						} else if (nota == 4.5) {
+							lblcmbNfNotas.setSelectedIndex(9);
+						}else if (nota == 5) {
+							lblcmbNfNotas.setSelectedIndex(10);
+						}else if (nota == 5.5) {
+							lblcmbNfNotas.setSelectedIndex(11);
+						}else if (nota == 6) {
+							lblcmbNfNotas.setSelectedIndex(12);
+						}else if (nota == 6.5) {
+							lblcmbNfNotas.setSelectedIndex(13);
+						}else if (nota == 7) {
+							lblcmbNfNotas.setSelectedIndex(14);
+						}else if (nota == 7.5) {
+							lblcmbNfNotas.setSelectedIndex(15);
+						}else if (nota == 8) {
+							lblcmbNfNotas.setSelectedIndex(16);
+						}else if (nota == 8.5) {
+							lblcmbNfNotas.setSelectedIndex(17);
+						}else if (nota == 9) {
+							lblcmbNfNotas.setSelectedIndex(18);
+						}else if (nota == 9.5) {
+							lblcmbNfNotas.setSelectedIndex(19);
+						}else {
+							lblcmbNfNotas.setSelectedIndex(20);
+						}
+					
+						lblNfFaltas.setText(String.valueOf(boletim.getFalta()));
+
+					} catch (Exception e4) {
+						e4.printStackTrace();
+						JOptionPane.showMessageDialog(null, "Inválido - RGM inserido não está cadastrado!");
+					}
+					// =====================================
+				}
+			}
+		});
 		mnNewMenu_1.add(mntmNewMenuItem_8);
 		
 		mnNewMenu_2 = new JMenu("Ajuda");
 		menuBar.add(mnNewMenu_2);
 		
 		mntmNewMenuItem_9 = new JMenuItem("Sobre");
+		mntmNewMenuItem_9.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// =====================================
+				// 1. Mostrar sobre o grupo
+				JOptionPane.showMessageDialog(null, "                              Sistema de cadastro de alunos para a disciplina de POO\n\nNo sistema você pode realizar as seguintes ações com os dados dos alunos e dos boletins:\r\n1.Cadastrar \n2.Editar \n3.Excluir \n4.Verificar \n\nDesenvolvido pelo grupo JAVAMOS - 2023.");
+				// =====================================
+			}
+		});
 		mntmNewMenuItem_9.setHorizontalAlignment(SwingConstants.LEFT);
 		mnNewMenu_2.add(mntmNewMenuItem_9);
 		contentPane =  new JPanel();
@@ -679,6 +1236,11 @@ public class TelaPrincipal extends JFrame {
 						}
 						
 						String periodo = aluno.getPeriodoAluno();
+						
+						rdbtnCMatutino.setSelected(false);
+						rdbtnCVespertino.setSelected(false);
+						rdbtnCNoturno.setSelected(false);
+						
 						if (periodo.equals("Matutino")) {
 							rdbtnCMatutino.setSelected(true);
 						} else if (periodo.equals("Vespertino")) {
